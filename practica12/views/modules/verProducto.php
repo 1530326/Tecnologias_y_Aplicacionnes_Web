@@ -1,10 +1,7 @@
 <?php
-  /*session_start();
-  if($_SESSION["id"]){
-    header("location:index.php?action=inicio");
-    exit();
-  }*/
-
+  if(!isset($_SESSION["id"])){
+    echo "<script>location.href='index.php';</script>";
+  }
   $product = new MvcController();
   $resultado = $product -> mostrarProductoController();
 ?>
@@ -14,7 +11,7 @@
 
   <div class="row">
       <div class="col-sm-4 col-sm-offset-1 text-center">
-        <img src="views/tools/img/product.png" width="50%">
+        <img src="<?php echo $resultado['foto'] ?>" width="50%">
       </div>
       <div class="col-sm-6 text-left" align="center">
         <font size="8"><?php echo $resultado["nombre"] ?></font><br>

@@ -1,7 +1,3 @@
-<?php
-  $iniciar = new MvcController();
-  $iniciar->ingresarController();
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -84,3 +80,8 @@
 </script>
 </body>
 </html>
+
+<?php
+  $iniciar = new MvcController();
+  $iniciar->ingresarController();
+?>

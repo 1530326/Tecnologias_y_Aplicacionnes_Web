@@ -1,9 +1,7 @@
 <?php
-  /*session_start();
-  if($_SESSION["id"]){
-    header("location:index.php?action=inicio");
-    exit();
-  }*/
+  if(!isset($_SESSION["id"])){
+    echo "<script>location.href='index.php';</script>";
+  }
 ?>
 <!-- Main content -->
 <section class="content"> 
@@ -24,6 +22,21 @@
             </div>
           </div>
         </div>
+            <?php 
+              $valorC = $_SESSION["contra"];
+            ?>
+            <script type="text/javascript">
+              function confirmar(cat){
+                var contra = "<?php echo $valorC; ?>";
+                var valor = prompt("Ingresa contraseña: ");
+
+                if(valor!=contra){
+                  location.href='index.php?action=mostrarCategorias';
+                }else{
+                  location.href='index.php?action=mostrarCategorias&idBorrar='+cat;
+                }
+              }
+            </script>
             <!-- /.box-header -->
         <div class="box-body table-responsive no-padding">
           <table class="table table-hover">

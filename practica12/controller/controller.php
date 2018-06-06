@@ -29,8 +29,11 @@
 				$respuesta = Datos::ingresarModel($datosController, "usuarios");
 
 				if($respuesta["email"] == $_POST["emailLogin"] && $respuesta["contra"] == $_POST["passLogin"]){
-					session_start();
 					$_SESSION["id"] = $respuesta["id_usuario"];
+					$_SESSION["usuario"] = $respuesta["nombre_usuario"];
+					$_SESSION["contra"] = $respuesta["contra"];
+					$_SESSION["fecha"] = $respuesta["fecha_agregado"];
+					$_SESSION["ruta"] = $respuesta["foto"];
 					echo "<script>location.href='index.php?action=ok';</script>";
 				}else{
 					echo "<script>location.href='index.php';</script>";
@@ -41,19 +44,22 @@
 		//Función que recoge los datos del formulario de usuario y los manda al método del modelo para ser agregado a la base de datos
 		public function addUserController(){
 			if(isset($_POST["nomUsuario"])){
+				$ruta = "views/tools/img/";
+				$ruta2 = $ruta.$_FILES["fotoUsuario"]["name"];
+				copy($_FILES["fotoUsuario"]["tmp_name"], $ruta2);
 				$fecha = date("Y-m-d");
 				$datosController = array( "nombre"=>$_POST["nomUsuario"],
 										  "apellido"=>$_POST["apeUsuario"],
 										  "nickname"=>$_POST["nickUsuario"],
 										  "correo"=>$_POST["correoUsuario"],
 										  "contra"=>$_POST["contraUsuario"],
-										  "fecha"=>$fecha);
+										  "fecha"=>$fecha,
+										  "ruta"=>$ruta2);
 
 				$respuesta = Datos::addUserModel($datosController, "usuarios");
 
 				if($respuesta == "success"){
 					echo "<script>location.href='index.php?action=mostrarUsuarios';</script>";
-					//echo "<script>alert('El usuario se ha registrado exitosamente');</script>";
 				}else{
 					echo "<script>alert('Ha ocurrido un error');</script>";
 				}
@@ -73,7 +79,7 @@
 					<td>'.$item["nombre_usuario"].'</td>
 					<td>'.$item["email"].'</td>
 					<td>'.$item["fecha_agregado"].'</td>
-					<td><a href="index.php?action=editarUsuario&id='.$item["id_usuario"].'" class="btn btn-block btn-info">Editar</a> <a href="index.php?action=mostrarUsuarios&idBorrar='.$item["id_usuario"].'" class="btn btn-block btn-danger">Borrar</a></td>
+					<td><a href="index.php?action=editarUsuario&id='.$item["id_usuario"].'" class="btn btn-info">Editar</a> <a onclick="confirmar('.$item["id_usuario"].');" class="btn btn-danger">Borrar</a></td>
 				</tr>';
 			}
 		}
@@ -125,6 +131,11 @@
 			 	<input type="text" class="form-control" value="'.$respuesta["contra"].'" name="contraEditar" required>
 			 </div>
 
+			 <div class="form-group">
+                <label>Imagen: </label>
+			 	<input type="file" class="form-control" name="fotoEditar" accept="image/*" required>
+			 </div>
+
 			 <div class="box-footer">
 			 	<input type="submit" value="Actualizar" class="btn btn-info pull-right">
 			 </div>';
@@ -134,6 +145,9 @@
 		//actualiza los datos del usuario seleccionado
 		public function actualizarUsuariosController(){
 			if(isset($_POST["idEditarUsuario"])){
+				$ruta = "views/tools/img/";
+				$ruta2 = $ruta.$_FILES["fotoEditar"]["name"];
+				copy($_FILES["fotoEditar"]["tmp_name"], $ruta2);
 				$fecha = date("Y-m-d");
 				$datosController = array( "id"=>$_POST["idEditarUsuario"],
 										  "nombre"=>$_POST["nombreEditar"],
@@ -141,7 +155,8 @@
 										  "nickname"=>$_POST["nicknameEditar"],
 										  "correo"=>$_POST["emailEditar"],
 										  "contra"=>$_POST["contraEditar"],
-										  "fecha"=>$fecha);
+										  "fecha"=>$fecha,
+										  "ruta"=>$ruta2);
 			
 				$respuesta = Datos::actualizarUsuariosModel($datosController, "usuarios");
 
@@ -183,7 +198,7 @@
 					<td>'.$item["nombre"].'</td>
 					<td>'.$item["descripcion"].'</td>
 					<td>'.$item["fecha_agregado"].'</td>
-					<td><a href="index.php?action=editarCategoria&id='.$item["id_categoria"].'" class="btn btn-block btn-info">Editar</a> <a href="index.php?action=mostrarCategorias&idBorrar='.$item["id_categoria"].'" class="btn btn-block btn-danger">Borrar</a></td>
+					<td><a href="index.php?action=editarCategoria&id='.$item["id_categoria"].'" class="btn btn-info">Editar</a> <a onclick="confirmar('.$item["id_categoria"].');" class="btn btn-danger">Borrar</a></td>
 				</tr>';
 			}
 		}
@@ -253,13 +268,17 @@
 		//Función que recoge los datos del formulario de productos y los manda al método del modelo para ser agregado a la base de datos
 		public function addProductoController(){
 			if(isset($_POST["codProducto"])){
+				$ruta = "views/tools/img/";
+				$ruta2 = $ruta.$_FILES["fotoProducto"]["name"];
+				copy($_FILES["fotoProducto"]["tmp_name"], $ruta2);
 				$fecha = date("Y-m-d");
 				$datosController = array( "codigo"=>$_POST["codProducto"],
 										  "nombre"=>$_POST["nombre"],
 										  "precio"=>$_POST["precio"],
 										  "stock"=>$_POST["stock"],
 										  "categoria"=>$_POST["categoria"],
-										  "fecha"=>$fecha);
+										  "fecha"=>$fecha,
+										  "ruta"=>$ruta2);
 
 				$respuesta = Datos::addProductosModel($datosController, "productos");
 
@@ -275,25 +294,24 @@
 		public function vistaProductosController(){
 
 			$respuesta = Datos::vistaProductosModel("productos");
-
+			$usr_contra = $_SESSION["contra"];
 			foreach($respuesta as $row => $item){
 				$categoria = Datos::listOneCategoriaModel($item["id_categoria"],"categorias");
-				echo'<tr>
-					<td>'.$item["id_producto"].'</td>
-					<td>'.$item["codigo_producto"].'</td>
-					<td>'.$item["nombre"].'</td>
-					<td>'.$item["fecha_agregado"].'</td>
-					<td>'.$item["precio"].'</td>
-					<td>'.$item["stock"].'</td>
-					<td>'.$categoria[0].'</td>
-					<td><a href="index.php?action=verProducto&id='.$item["id_producto"].'" class="btn btn-block btn-success">Ver</a><a href="index.php?action=editarProducto&id='.$item["id_producto"].'" class="btn btn-block btn-info">Editar</a> <a href="index.php?action=mostrarProductos&idBorrar='.$item["id_producto"].'" class="btn btn-block btn-danger">Borrar</a></td>
-				</tr>';
+				echo"<tr>
+					<td>$item[id_producto]</td>
+					<td>$item[codigo_producto]</td>
+					<td>$item[nombre]</td>
+					<td>$item[fecha_agregado]</td>
+					<td>$item[precio]</td>
+					<td>$item[stock]</td>
+					<td>$categoria[0]</td>
+					<td><a href='index.php?action=verProducto&id=$item[id_producto]' class='btn btn-success'>Ver</a><a href='index.php?action=editarProducto&id=$item[id_producto]' class='btn btn-info'>Editar</a> <a onclick='confirmar($item[id_producto]);' class='btn btn-danger'>Borrar</a></td>
+				</tr>";
 			}
 		}
 
 		//borra el producto de la tabla
 		public function borrarProductosController(){
-
 			if(isset($_GET["idBorrar"])){
 				$datosController = $_GET["idBorrar"];
 				$respuesta = Datos::borrarProductosModel($datosController, "productos");
@@ -339,6 +357,11 @@
 			echo '</select>
 			 </div>
 
+			 <div class="form-group">
+                <label>Imagen: </label>
+			 	<input type="file" class="form-control" name="fotoPEditar" accept="image/*" required>
+			 </div>
+
 			 <div class="box-footer">
 			 	<input type="submit" value="Actualizar" class="btn btn-info pull-right">
 			 </div>';
@@ -348,13 +371,17 @@
 		//actualiza los datos de la categoría seleccionada
 		public function actualizarProductosController(){
 			if(isset($_POST["idEditarProducto"])){
+				$ruta = "views/tools/img/";
+				$ruta2 = $ruta.$_FILES["fotoPEditar"]["name"];
+				copy($_FILES["fotoPEditar"]["tmp_name"], $ruta2);
 				$fecha = date("Y-m-d");
 				$datosController = array( "id"=>$_POST["idEditarProducto"],
 										  "codigo"=>$_POST["codigoEditar"],
 										  "nombre"=>$_POST["nombreEditar"],
 										  "precio"=>$_POST["precioEditar"],
 										  "categoria"=>$_POST["categoriaEditar"],
-										  "fecha"=>$fecha);
+										  "fecha"=>$fecha,
+										  "ruta"=>$ruta2);
 			
 				$respuesta = Datos::actualizarProductosModel($datosController, "productos");
 
@@ -397,7 +424,7 @@
 				$respuesta = Datos::editarProductosModel($_GET["id"], "productos");
 
 				$stockActual = $respuesta["stock"] + $_POST["cantidad"];
-				$datosController = array( "id_usuario"=>5,
+				$datosController = array( "id_usuario"=>$_SESSION["id"],
 										  "id_producto"=>$_GET["id"],
 										  "nota"=>$_POST["nota"],
 										  "referencia"=>$_POST["referencia"],
@@ -424,7 +451,7 @@
 					echo "<script>alert('La cantidad del stock es menor que la cantidad ingresada');</script>";
 				}else{
 					$stockActual = $respuesta["stock"] - $_POST["cantidad"];
-					$datosController = array( "id_usuario"=>5,
+					$datosController = array( "id_usuario"=>$_SESSION["id"],
 										  "id_producto"=>$_GET["id"],
 										  "nota"=>$_POST["nota"],
 										  "referencia"=>$_POST["referencia"],
@@ -440,6 +467,11 @@
 					}
 				}
 			}
+		}
+
+		//--------------------SECCIÓN DASHBOARD-----------------------
+		public function contarController($tabla){
+			return Datos::contarModel($tabla);
 		}
 	}
 ?>

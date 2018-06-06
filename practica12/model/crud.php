@@ -4,7 +4,7 @@
 	class Datos extends Conexion{
 
 		public static function ingresarModel($datosModel, $tabla){
-			$sql = Conexion::conectar()->prepare("SELECT id_usuario, email, contra FROM $tabla WHERE email=:email AND contra=:contra");	
+			$sql = Conexion::conectar()->prepare("SELECT id_usuario, email, contra, nombre_usuario, fecha_agregado, foto FROM $tabla WHERE email=:email AND contra=:contra");	
 
 			$sql->bindParam(":email", $datosModel["email"], PDO::PARAM_STR);
 			$sql->bindParam(":contra", $datosModel["contra"], PDO::PARAM_STR);
@@ -18,7 +18,7 @@
 
 		//función para agregar un nuevo usuario, recibe todos los parámetros necesarios para registrarlo en la base de datos
 		public static function addUserModel($datosModel, $tabla){
-			$sql = Conexion::conectar()->prepare("INSERT INTO $tabla(id_usuario, nombre, apellido, nombre_usuario, contra, email, fecha_agregado) VALUES (NULL,:nombre, :apellido, :nombreUsuario, :contra, :email, :fecha)");	
+			$sql = Conexion::conectar()->prepare("INSERT INTO $tabla(id_usuario, nombre, apellido, nombre_usuario, contra, email, fecha_agregado, foto) VALUES (NULL,:nombre, :apellido, :nombreUsuario, :contra, :email, :fecha, :ruta)");	
 
 			$sql->bindParam(":nombre", $datosModel["nombre"], PDO::PARAM_STR);
 			$sql->bindParam(":apellido", $datosModel["apellido"], PDO::PARAM_STR);
@@ -26,6 +26,7 @@
 			$sql->bindParam(":contra", $datosModel["contra"], PDO::PARAM_STR);
 			$sql->bindParam(":email", $datosModel["correo"], PDO::PARAM_STR);
 			$sql->bindParam(":fecha", $datosModel["fecha"], PDO::PARAM_STR);
+			$sql->bindParam(":ruta", $datosModel["ruta"], PDO::PARAM_STR);
 
 			if($sql->execute()){
 				return "success";
@@ -65,7 +66,7 @@
 		//regresa los valores de los campos del registro que fue seleccionado
 		public static function editarUsuariosModel($datosModel, $tabla){
 
-			$stmt = Conexion::conectar()->prepare("SELECT id_usuario, nombre, apellido, nombre_usuario, contra, email FROM $tabla WHERE id_usuario = :id");
+			$stmt = Conexion::conectar()->prepare("SELECT id_usuario, nombre, apellido, nombre_usuario, contra, email, foto FROM $tabla WHERE id_usuario = :id");
 			$stmt->bindParam(":id", $datosModel, PDO::PARAM_INT);	
 			$stmt->execute();
 
@@ -77,7 +78,7 @@
 		//manda todos los datos recogidos del formulario del usuario seleccionado para actualizar el registro en la base de datos
 		public static function actualizarUsuariosModel($datosModel, $tabla){
 
-			$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET nombre = :nombre, apellido = :apellido, nombre_usuario = :nickname, contra = :contra, email = :email, fecha_agregado = :fecha WHERE id_usuario = :id");
+			$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET nombre = :nombre, apellido = :apellido, nombre_usuario = :nickname, contra = :contra, email = :email, fecha_agregado = :fecha, foto = :foto WHERE id_usuario = :id");
 
 			$stmt->bindParam(":id", $datosModel["id"], PDO::PARAM_INT);
 			$stmt->bindParam(":nombre", $datosModel["nombre"], PDO::PARAM_STR);
@@ -86,6 +87,7 @@
 			$stmt->bindParam(":contra", $datosModel["contra"], PDO::PARAM_STR);
 			$stmt->bindParam(":email", $datosModel["correo"], PDO::PARAM_STR);
 			$stmt->bindParam(":fecha", $datosModel["fecha"], PDO::PARAM_STR);
+			$stmt->bindParam(":foto", $datosModel["ruta"], PDO::PARAM_STR);
 
 			if($stmt->execute()){
 				return "success";
@@ -205,7 +207,7 @@
 
 		//función para agregar un nuevo producto, recibe todos los parámetros necesarios para registrarlo en la base de datos
 		public static function addProductosModel($datosModel, $tabla){
-			$sql = Conexion::conectar()->prepare("INSERT INTO $tabla(id_producto, codigo_producto, nombre, fecha_agregado, precio, stock, id_categoria) VALUES (NULL,:codigo, :nombre, :fecha, :precio, :stock, :categoria)");	
+			$sql = Conexion::conectar()->prepare("INSERT INTO $tabla(id_producto, codigo_producto, nombre, fecha_agregado, precio, stock, id_categoria, foto) VALUES (NULL,:codigo, :nombre, :fecha, :precio, :stock, :categoria, :foto)");	
 
 			$sql->bindParam(":codigo", $datosModel["codigo"], PDO::PARAM_STR);
 			$sql->bindParam(":nombre", $datosModel["nombre"], PDO::PARAM_STR);
@@ -213,6 +215,7 @@
 			$sql->bindParam(":precio", $datosModel["precio"], PDO::PARAM_STR);
 			$sql->bindParam(":stock", $datosModel["stock"], PDO::PARAM_INT);
 			$sql->bindParam(":categoria", $datosModel["categoria"], PDO::PARAM_INT);
+			$sql->bindParam(":foto", $datosModel["ruta"], PDO::PARAM_STR);
 
 			if($sql->execute()){
 				return "success";
@@ -252,7 +255,7 @@
 		//regresa los valores de los campos del registro que fue seleccionado
 		public static function editarProductosModel($datosModel, $tabla){
 
-			$stmt = Conexion::conectar()->prepare("SELECT id_producto, codigo_producto, nombre, precio, id_categoria, stock FROM $tabla WHERE id_producto = :id");
+			$stmt = Conexion::conectar()->prepare("SELECT id_producto, codigo_producto, nombre, precio, id_categoria, stock, foto FROM $tabla WHERE id_producto = :id");
 			$stmt->bindParam(":id", $datosModel, PDO::PARAM_INT);	
 			$stmt->execute();
 
@@ -264,7 +267,7 @@
 		//manda todos los datos recogidos del formulario del producto seleccionado para actualizar el registro en la base de datos
 		public static function actualizarProductosModel($datosModel, $tabla){
 
-			$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET codigo_producto = :codigo, nombre = :nombre, precio = :precio, fecha_agregado = :fecha, id_categoria = :categoria WHERE id_producto = :id");
+			$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET codigo_producto = :codigo, nombre = :nombre, precio = :precio, fecha_agregado = :fecha, id_categoria = :categoria, foto = :foto WHERE id_producto = :id");
 
 			$stmt->bindParam(":id", $datosModel["id"], PDO::PARAM_INT);
 			$stmt->bindParam(":codigo", $datosModel["codigo"], PDO::PARAM_STR);
@@ -272,6 +275,7 @@
 			$stmt->bindParam(":precio", $datosModel["precio"], PDO::PARAM_STR);
 			$stmt->bindParam(":categoria", $datosModel["categoria"], PDO::PARAM_INT);
 			$stmt->bindParam(":fecha", $datosModel["fecha"], PDO::PARAM_STR);
+			$stmt->bindParam(":foto", $datosModel["ruta"], PDO::PARAM_STR);
 
 			if($stmt->execute()){
 				return "success";
@@ -346,6 +350,15 @@
 			}else{
 				return "error";
 			}
+
+			$sql->close();
+		}
+
+		//----------------------SECCION DASHBOARD-----------------------------
+		public static function contarModel($tabla){
+			$sql = Conexion::conectar()->prepare("SELECT count(*) FROM $tabla");
+			$sql->execute(); 
+			return $sql->fetch(PDO::FETCH_BOTH);
 
 			$sql->close();
 		}

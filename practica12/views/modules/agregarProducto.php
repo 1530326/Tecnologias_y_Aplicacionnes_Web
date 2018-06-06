@@ -1,9 +1,7 @@
-<?php
-  /*session_start();
-  if($_SESSION["id"]){
-    header("location:index.php?action=inicio");
-    exit();
-  }*/
+<?php  
+  if(!isset($_SESSION["id"])){
+    echo "<script>location.href='index.php';</script>";
+  }
   
   $registro = new MvcController();
   $registro->addProductoController();
@@ -22,7 +20,7 @@
               </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <form method="POST">
+              <form method="POST" enctype="multipart/form-data">
                 <!-- text input -->
                 <div class="form-group">
                   <label>Código del producto: </label>
@@ -49,6 +47,11 @@
                       <option value="<?php echo $cats["id_categoria"] ?>"><?php echo $cats["nombre"]; ?></option>
                     <?php endforeach; ?>
                   </select>
+                </div>
+
+                <div class="form-group">
+                  <label>Imagen: </label>
+                  <input type="file" name="fotoProducto" class="form-control" accept="image/*" required>
                 </div>
                 <div class="box-footer">
                   <button type="submit" class="btn btn-info pull-right">Guardar</button>

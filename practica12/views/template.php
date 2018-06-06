@@ -1,3 +1,7 @@
+<?php 
+session_start(); 
+  //error_reporting(0);
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,9 +42,9 @@
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
+<?php if(isset($_SESSION["id"])){ ?>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
-
   <header class="main-header">
     <!-- Logo -->
     <a href="views/tools/index2.html" class="logo">
@@ -61,27 +65,24 @@
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="views/tools/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-              <span class="hidden-xs">Alexander Pierce</span>
+              <img src="<?php echo $_SESSION['ruta']; ?>" class="user-image" alt="User Image">
+              <span class="hidden-xs"><?php echo $_SESSION["usuario"]; ?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
               <li class="user-header">
-                <img src="views/tools/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="<?php echo $_SESSION['ruta']; ?>" class="img-circle" alt="User Image">
 
                 <p>
-                  Alexander Pierce - Web Developer
-                  <small>Member since Nov. 2012</small>
+                  <?php echo $_SESSION["usuario"]; ?>
+                  <small>Fecha de agregado: <?php echo $_SESSION["fecha"]; ?></small>
                 </p>
               </li>
               <!-- Menu Body -->
               <!-- Menu Footer-->
               <li class="user-footer">
-                <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Perfil</a>
-                </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Salir</a>
+                  <a href="index.php?action=salir" class="btn btn-default btn-flat">Salir</a>
                 </div>
               </li>
             </ul>
@@ -90,6 +91,7 @@
       </div>
     </nav>
   </header>
+
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
@@ -97,11 +99,11 @@
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="views/tools/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="<?php echo $_SESSION['ruta']; ?>" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Alexander Pierce</p>
-          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+          <p><?php echo $_SESSION["usuario"]; ?></p>
+          <a href="#"><i class="fa fa-circle text-success"></i> Disponible</a>
         </div>
       </div>
       <!-- /.search form -->
@@ -114,8 +116,8 @@
   <div class="content-wrapper">
     <section class="content">
       <?php 
-        $mvc = new MvcController();
-        $mvc -> enlacesPaginasController();
+          $mvc = new MvcController();
+          $mvc -> enlacesPaginasController();
       ?>
     </section>
   </div>
@@ -166,4 +168,10 @@
 <!-- AdminLTE for demo purposes -->
 <script src="views/tools/dist/js/demo.js"></script>
 </body>
+<?php 
+}else{
+  $mvc = new MvcController();
+  $mvc -> enlacesPaginasController();
+}
+?>
 </html>

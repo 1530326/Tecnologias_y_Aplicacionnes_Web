@@ -1,9 +1,7 @@
 <?php
-  /*session_start();
-  if($_SESSION["id"]){
-    header("location:index.php?action=inicio");
-    exit();
-  }*/
+  if(!isset($_SESSION["id"])){
+    echo "<script>location.href='index.php';</script>";
+  }
 ?>
     <!-- Main content -->
     <section class="content">

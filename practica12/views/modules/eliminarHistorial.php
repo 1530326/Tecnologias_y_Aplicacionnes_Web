@@ -1,9 +1,7 @@
-<?php
-  /*session_start();
-  if($_SESSION["id"]){
-    header("location:index.php?action=inicio");
-    exit();
-  }*/
+<?php  
+  if(!isset($_SESSION["id"])){
+    echo "<script>location.href='index.php';</script>";
+  }
   
   $registro = new MvcController();
   $registro->removeHistorialController();

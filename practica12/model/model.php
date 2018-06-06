@@ -34,6 +34,10 @@
 
 				$module = "views/modules/dashboard.php";
 
+			}else if($enlacesModel=="salir"){
+
+				$module = "views/modules/salir.php";
+
 			}else{
 
 				$module = "views/modules/inicio.php";

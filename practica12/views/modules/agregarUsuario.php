@@ -1,11 +1,9 @@
     <!-- Main content -->
-<?php
-  /*session_start();
-  if($_SESSION["id"]){
-    header("location:index.php?action=inicio");
-    exit();
-  }*/
-  
+<?php  
+  if(!isset($_SESSION["id"])){
+    echo "<script>location.href='index.php';</script>";
+  }
+
   $registro = new MvcController();
   $registro->addUserController();
 ?>
@@ -19,7 +17,7 @@
               </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <form method="POST">
+              <form method="POST" enctype="multipart/form-data">
                 <!-- text input -->
                 <div class="form-group">
                   <label>Nombre: </label>
@@ -40,6 +38,10 @@
                 <div class="form-group">
                   <label>Contraseña: </label>
                   <input type="password" name="contraUsuario" class="form-control" placeholder="Contraseña" required>
+                </div>
+                <div class="form-group">
+                  <label>Imagen: </label>
+                  <input type="file" name="fotoUsuario" class="form-control" accept="image/*" required>
                 </div>
 
               <div class="box-footer">

@@ -1,9 +1,7 @@
 <?php
-  /*session_start();
-  if($_SESSION["id"]){
-    header("location:index.php?action=inicio");
-    exit();
-  }*/
+  if(!isset($_SESSION["id"])){
+    echo "<script>location.href='index.php';</script>";
+  }
 ?>
     <!-- Main content -->
     <section class="content">
@@ -16,7 +14,7 @@
               </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <form method="POST">
+              <form method="POST" enctype="multipart/form-data">
                 <?php
                   $editarUsuario = new MvcController();
                   $editarUsuario -> editarUsuariosController();

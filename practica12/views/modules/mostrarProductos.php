@@ -1,10 +1,9 @@
 <?php
-  /*session_start();
-  if($_SESSION["id"]){
-    header("location:index.php?action=inicio");
-    exit();
-  }*/
+  if(!isset($_SESSION["id"])){
+    echo "<script>location.href='index.php';</script>";
+  }
 ?>
+
 <!-- Main content -->
 <section class="content"> 
   <!-- /.row -->
@@ -26,6 +25,21 @@
         </div>
             <!-- /.box-header -->
         <div class="box-body table-responsive no-padding">
+            <?php 
+              $valorC = $_SESSION["contra"];
+            ?>
+            <script type="text/javascript">
+              function confirmar(product){
+                var contra = "<?php echo $valorC; ?>";
+                var valor = prompt("Ingresa contraseña: ");
+
+                if(valor!=contra){
+                  location.href='index.php?action=mostrarProductos';
+                }else{
+                  location.href='index.php?action=mostrarProductos&idBorrar='+product;
+                }
+              }
+            </script>
           <table class="table table-hover">
             <tr>
               <th>ID</th>
