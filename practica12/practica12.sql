@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 06-06-2018 a las 05:48:55
+-- Tiempo de generación: 10-06-2018 a las 22:52:25
 -- Versión del servidor: 5.7.21
 -- Versión de PHP: 5.6.35
 
@@ -34,17 +34,49 @@ CREATE TABLE IF NOT EXISTS `categorias` (
   `nombre` varchar(100) NOT NULL,
   `descripcion` mediumtext NOT NULL,
   `fecha_agregado` date NOT NULL,
-  PRIMARY KEY (`id_categoria`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+  `id_tienda` int(11) NOT NULL,
+  PRIMARY KEY (`id_categoria`),
+  KEY `id_tienda` (`id_tienda`)
+) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `categorias`
 --
 
-INSERT INTO `categorias` (`id_categoria`, `nombre`, `descripcion`, `fecha_agregado`) VALUES
-(1, 'LÃ­nea Blanca', 'CategorÃ­a de lÃ­nea blanca :)', '2018-06-05'),
-(3, 'Celulares', 'CategorÃ­as de telÃ©fonos mÃ³vil', '2018-06-05'),
-(5, 'ElectrodomÃ©sticos', 'CategorÃ­a electrodomÃ©sticos ', '2018-06-06');
+INSERT INTO `categorias` (`id_categoria`, `nombre`, `descripcion`, `fecha_agregado`, `id_tienda`) VALUES
+(27, 'Celulares', 'Disp. mÃ³viles', '2018-06-10', 1),
+(28, 'LÃ­nea Blanca', 'ArtÃ­culos de lÃ­nea blanca', '2018-06-10', 2),
+(29, 'Interiores', 'ArtÃ­culos para interiores', '2018-06-10', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `detalles_venta`
+--
+
+DROP TABLE IF EXISTS `detalles_venta`;
+CREATE TABLE IF NOT EXISTS `detalles_venta` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_producto` int(11) NOT NULL,
+  `id_venta` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `precio` double NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_producto` (`id_producto`),
+  KEY `id_venta` (`id_venta`)
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `detalles_venta`
+--
+
+INSERT INTO `detalles_venta` (`id`, `id_producto`, `id_venta`, `nombre`, `cantidad`, `precio`) VALUES
+(8, 20, 6, 'Librero', 2, 4064),
+(3, 21, 2, 'Moto G6+', 1, 0),
+(5, 21, 3, 'Moto G6+', 1, 0),
+(9, 19, 6, 'Refrigerador MABE', 1, 7800),
+(10, 20, 7, 'Librero', 1, 4064);
 
 -- --------------------------------------------------------
 
@@ -57,27 +89,25 @@ CREATE TABLE IF NOT EXISTS `historial` (
   `id_historial` int(11) NOT NULL AUTO_INCREMENT,
   `id_producto` int(11) NOT NULL,
   `id_usuario` int(11) NOT NULL,
+  `id_tienda` int(11) NOT NULL,
   `fecha` date NOT NULL,
   `nota` varchar(255) NOT NULL,
   `referencia` varchar(100) NOT NULL,
   `cantidad` int(11) NOT NULL,
   PRIMARY KEY (`id_historial`),
   KEY `id_producto` (`id_producto`),
-  KEY `id_usuario` (`id_usuario`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+  KEY `id_usuario` (`id_usuario`),
+  KEY `id_tienda` (`id_tienda`)
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `historial`
 --
 
-INSERT INTO `historial` (`id_historial`, `id_producto`, `id_usuario`, `fecha`, `nota`, `referencia`, `cantidad`) VALUES
-(1, 1, 5, '2018-06-05', 'Agregar stock', 'p100001', 3),
-(3, 2, 5, '2018-06-05', 'Agregar entrada', 'p200002', 6),
-(4, 2, 5, '2018-06-05', 'Agregar salida', 'p2000021', 4),
-(5, 4, 5, '2018-06-05', 'Agregar salida', 'p300031', 2),
-(6, 1, 5, '2018-06-05', 'Agregar salida', 'p100023', 3),
-(7, 1, 5, '2018-06-06', 'Agregar entrada', '7394h', 10),
-(8, 6, 12, '2018-06-06', 'Agregar salida', '008829', 3);
+INSERT INTO `historial` (`id_historial`, `id_producto`, `id_usuario`, `id_tienda`, `fecha`, `nota`, `referencia`, `cantidad`) VALUES
+(14, 16, 19, 1, '2018-06-10', 'Agregar salida', 'kdhw290', 3),
+(15, 21, 15, 1, '2018-06-10', 'Agregar entrada', 'fwgeg443', 5),
+(16, 16, 15, 1, '2018-06-10', 'Agregar entrada', 'p200002', 7);
 
 -- --------------------------------------------------------
 
@@ -95,18 +125,44 @@ CREATE TABLE IF NOT EXISTS `productos` (
   `stock` int(11) NOT NULL,
   `id_categoria` int(11) DEFAULT NULL,
   `foto` varchar(300) NOT NULL,
+  `id_tienda` int(11) NOT NULL,
   PRIMARY KEY (`id_producto`),
-  KEY `id_categoria` (`id_categoria`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+  KEY `id_categoria` (`id_categoria`),
+  KEY `id_tienda` (`id_tienda`)
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `productos`
 --
 
-INSERT INTO `productos` (`id_producto`, `codigo_producto`, `nombre`, `fecha_agregado`, `precio`, `stock`, `id_categoria`, `foto`) VALUES
-(2, '000002', 'Samsung Galaxy s9', '2018-06-05', 12500, 5, 3, 'views/tools/img/product.png'),
-(5, '000003', 'Refrigerador MABE', '2018-06-06', 8363, 7, 1, 'views/tools/img/product.png'),
-(6, '000001', 'Moto G4+', '2018-06-06', 4500, 7, 3, 'views/tools/img/product.png');
+INSERT INTO `productos` (`id_producto`, `codigo_producto`, `nombre`, `fecha_agregado`, `precio`, `stock`, `id_categoria`, `foto`, `id_tienda`) VALUES
+(16, '000001', 'Moto G4+', '2018-06-10', 4500, 7, 27, 'views/tools/img/angie.png', 1),
+(20, '000005', 'Librero', '2018-06-10', 4064, 1, 29, 'views/tools/img/angie.png', 2),
+(19, '000004', 'Refrigerador MABE', '2018-06-10', 7800, 5, 28, 'views/tools/img/start.png', 2),
+(21, '000002', 'Moto G6+', '2018-06-10', 6000, 10, 27, 'views/tools/img/motorola-moto-g4-.jpg', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tienda`
+--
+
+DROP TABLE IF EXISTS `tienda`;
+CREATE TABLE IF NOT EXISTS `tienda` (
+  `id_tienda` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) NOT NULL,
+  `direccion` varchar(200) NOT NULL,
+  `fecha` date NOT NULL,
+  PRIMARY KEY (`id_tienda`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `tienda`
+--
+
+INSERT INTO `tienda` (`id_tienda`, `nombre`, `direccion`, `fecha`) VALUES
+(1, 'Sucursal Centro', 'Av. Centro 476', '2018-06-10'),
+(2, 'Sucursal Noreste', 'Av.  Noreste 123', '2018-06-10');
 
 -- --------------------------------------------------------
 
@@ -124,18 +180,45 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `email` varchar(60) NOT NULL,
   `fecha_agregado` date NOT NULL,
   `foto` varchar(300) NOT NULL,
-  PRIMARY KEY (`id_usuario`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+  `tipo_usuario` varchar(100) NOT NULL,
+  `id_tienda` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_usuario`),
+  KEY `id_tienda` (`id_tienda`)
+) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`id_usuario`, `nombre`, `apellido`, `nombre_usuario`, `contra`, `email`, `fecha_agregado`, `foto`) VALUES
-(5, 'Angela', 'Carrizales', 'angie', 'angie123', 'angie@angie.com', '2018-06-05', 'views/tools/img/avatar2.png'),
-(6, 'Brian', 'Becerra', 'eli', 'brian123', 'brian@brian.com', '2018-06-05', 'views/tools/img/avatar04.png'),
-(11, 'ejemplo', 'ejemplo1xd', 'ejem', 'ejemplo', 'ejemplo@ejemplo.com', '2018-06-06', 'views/tools/img/avatar.png'),
-(12, 'Mario', 'RodrÃ­guez', 'mario', 'mario', 'mario@mario.com', '2018-06-06', 'views/tools/img/user2-160x160.jpg');
+INSERT INTO `usuarios` (`id_usuario`, `nombre`, `apellido`, `nombre_usuario`, `contra`, `email`, `fecha_agregado`, `foto`, `tipo_usuario`, `id_tienda`) VALUES
+(13, 'Administrador', 'AD', 'admin', 'admin', 'admin@admin.com', '2018-06-09', 'views/tools/img/angie2.png', 'admin', NULL),
+(15, 'Angela', 'Carrizales', 'Angie', 'angie123', 'angie@angie.com', '2018-06-10', 'views/tools/img/angie.png', 'normal', 1),
+(16, 'Brian', 'Becerra', 'Brian', 'brian123', 'brian@brian.com', '2018-06-10', 'views/tools/img/angie.png', 'normal', 2),
+(19, 'Mario', 'RodrÃ­guez', 'Mario', 'mario', 'mario@mario.com', '2018-06-10', 'views/tools/img/angie.png', 'normal', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ventas`
+--
+
+DROP TABLE IF EXISTS `ventas`;
+CREATE TABLE IF NOT EXISTS `ventas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fecha` date NOT NULL,
+  `total` double NOT NULL,
+  `id_tienda` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_tienda` (`id_tienda`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `ventas`
+--
+
+INSERT INTO `ventas` (`id`, `fecha`, `total`, `id_tienda`) VALUES
+(6, '2018-06-10', 15928, 2),
+(7, '2018-06-10', 4064, 2);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

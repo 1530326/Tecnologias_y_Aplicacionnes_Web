@@ -7,6 +7,7 @@ session_start();
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="shortcut icon" href="views/tools/img/favicon.png" />
   <title>Inventario | Práctica12</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -28,19 +29,14 @@ session_start();
   <!-- Date Picker -->
   <link rel="stylesheet" href="views/tools/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
   <!-- Daterange picker -->
-  <link rel="stylesheet" href="views/tools/views/tools/bower_components/bootstrap-daterangepicker/daterangepicker.css">
+  <link rel="stylesheet" href="views/tools/bower_components/bootstrap-daterangepicker/daterangepicker.css">
   <!-- bootstrap wysihtml5 - text editor -->
-  <link rel="stylesheet" href="views/tools/views/tools/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
-
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
+  <link rel="stylesheet" href="views/tools/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+
+   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 <?php if(isset($_SESSION["id"])){ ?>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -62,6 +58,35 @@ session_start();
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
+          <?php
+            $obj = new MvcController();
+            $res = $obj->notificaciones($_SESSION["tienda"]);
+
+            if($_SESSION["tienda"]!=NULL){
+          ?>
+          <!-- Notifications: style can be found in dropdown.less -->
+          <li class="dropdown notifications-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-bell-o"></i>
+              <span class="label label-warning"><?php echo count($res); ?></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="header">Tu tienes <?php echo count($res); ?> notificaciones</li>
+              <li>
+                <!-- inner menu: contains the actual data -->
+                <ul class="menu">
+                <?php foreach($res as $datos): ?>
+                  <li>
+                    <a href="index.php?action=verProducto&id=<?php echo $datos['id_producto']; ?>">
+                      <i class="fa fa-warning text-yellow"></i> <?php echo $datos["nombre"]." con ".$datos["stock"]." en stock";  ?>
+                    </a>
+                  </li>
+                <?php endforeach; ?>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        <?php } ?>
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">

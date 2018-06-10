@@ -34,8 +34,8 @@
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
-    <p class="login-box-msg">Iniciar sesión</p>
-
+    <h2 class="login-box-msg">Iniciar sesión</h2>
+    <div align="center"><img src="views/tools/img/start.png"  class="img-circle" width="40%"></div><br>
     <form method="post">
       <div class="form-group has-feedback">
         <input type="email" class="form-control" placeholder="Email" name="emailLogin">

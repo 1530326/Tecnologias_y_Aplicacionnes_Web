@@ -6,6 +6,22 @@
     <!-- Main content -->
     <section class="content">
       <div class="row">
+        <?php $valorC = $_SESSION["contra"]; ?>
+        <script type="text/javascript">
+          function confirmarE(){
+            swal({
+              title: "Contraseña",
+              text:  "Ingrese contraseña",
+              content: "input",
+            }).then((value) => {
+              var contra = "<?php echo $valorC; ?>";
+
+              if(value==contra){
+                $("#formulario").submit();
+              }
+            });
+          }
+        </script>
         <!-- left column -->
         <div class="col-sm-8" style="margin-left: 180px">
             <div class="box box-info">
@@ -14,7 +30,7 @@
               </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <form method="POST" enctype="multipart/form-data">
+              <form method="POST" id="formulario" enctype="multipart/form-data">
                 <?php
                   $editarUsuario = new MvcController();
                   $editarUsuario -> editarUsuariosController();

@@ -38,6 +38,18 @@
 
 				$module = "views/modules/salir.php";
 
+			}else if($enlacesModel=="agregarTienda" || $enlacesModel=="mostrarTiendas" || $enlacesModel=="editarTienda" || $enlacesModel=="verTienda" || $enlacesModel=="dashboard2"){
+
+				$module = "views/modules/$enlacesModel.php";
+
+			}else if($enlacesModel=="okA" || $enlacesModel=="dashboardAdmin"){
+			
+				$module = "views/modules/dashboardAdmin.php";
+
+			}else if($enlacesModel=="mostrarVentas" || $enlacesModel=="agregarVenta" || $enlacesModel=="agregarVentaProd" || $enlacesModel=="terminarVenta" || $enlacesModel=="quitarItem"){
+
+				$module = "views/modules/$enlacesModel.php";
+
 			}else{
 
 				$module = "views/modules/inicio.php";
