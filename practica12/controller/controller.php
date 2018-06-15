@@ -48,11 +48,20 @@
 					$_SESSION["nomTienda"] = $respuestaTienda["nombre"];
 					$_SESSION["direTienda"] = $respuestaTienda["direccion"];
 					$_SESSION["fechaTienda"] = $respuestaTienda["fecha"];
+					$_SESSION["estado"] = $respuestaTienda["estado"];
 
 					if($respuesta["tipo_usuario"]=="admin"){
 						echo "<script>location.href='index.php?action=okA';</script>";
 					}else{
-						echo "<script>location.href='index.php?action=ok';</script>";
+						if($respuestaTienda["estado"]==1){
+							echo "<script>location.href='index.php?action=ok';</script>";
+						}else{
+							unset($_SESSION["carrito"]);
+							$_SESSION["carrito"] = [];
+							$_SESSION["id"] = NULL;
+							session_destroy();
+							echo "<script>location.href='index.php';</script>";
+						}
 					}
 				}else{
 					echo "<script>location.href='index.php';</script>";
@@ -526,6 +535,10 @@
 			return Datos::contarAdminModel($tabla);
 		}
 
+		public function nombreTiendaController($id){
+			$res = Datos::nombreTiendaModel($id);
+			return $res[0];
+		}
 		//--------------------SECCIÓN TIENDAS-----------------------
 		//Función que recoge los datos del formulario de tienda y los manda al método del modelo para ser agregado a la base de datos, este modulo solo es visible para el administrador
 		public function addTiendaController(){
@@ -549,12 +562,18 @@
 		public function vistaTiendasController(){
 			$respuesta = Datos::vistaTiendasModel("tienda");
 			foreach($respuesta as $row => $item){
+				if($item["estado"]==1){
+					$estado = "Activa";
+				}else{
+					$estado = "Desactivada";
+				}
 				echo"<tr>
 					<td>$item[id_tienda]</td>
 					<td>$item[nombre]</td>
 					<td>$item[direccion]</td>
 					<td>$item[fecha]</td>
-					<td><a href='index.php?action=verTienda&id=$item[id_tienda]' class='btn btn-success'>Ver</a> <a href='index.php?action=editarTienda&id=$item[id_tienda]' class='btn btn-info'>Editar</a> <a onclick='confirmar($item[id_tienda]);' class='btn btn-danger'>Borrar</a></td>
+					<td>$estado</td>
+					<td><a href='index.php?action=verTienda&id=$item[id_tienda]' class='btn btn-success'>Ver</a> <a href='index.php?action=editarTienda&id=$item[id_tienda]' class='btn btn-info'>Editar</a> <a onclick='confirmar($item[id_tienda]);' class='btn btn-danger'>Borrar</a> <a onclick='confirmarA($item[id_tienda]);' class='btn bg-olive'>Activar</a> <a onclick='confirmarD($item[id_tienda]);' class='btn bg-orange'>Desactivar</a></td>
 				</tr>";
 			}
 		}
@@ -564,6 +583,32 @@
 			if(isset($_GET["idBorrar"])){
 				$datosController = $_GET["idBorrar"];
 				$respuesta = Datos::borrarTiendasModel($datosController, "tienda");
+
+				if($respuesta == "success"){
+					echo "<script>location.href='index.php?action=mostrarTiendas';</script>";
+				}
+
+			}
+		}
+
+		//--------------------------------ACTIVAR/DESACTIVAR TIENDAS---------------------------
+		//borra la tienda de la tabla
+		public function activarTiendasController(){
+			if(isset($_GET["idActivar"])){
+				$datosController = $_GET["idActivar"];
+				$respuesta = Datos::activarTiendasModel($datosController, "tienda");
+
+				if($respuesta == "success"){
+					echo "<script>location.href='index.php?action=mostrarTiendas';</script>";
+				}
+
+			}
+		}
+		//borra la tienda de la tabla
+		public function desactivarTiendasController(){
+			if(isset($_GET["idDesactivar"])){
+				$datosController = $_GET["idDesactivar"];
+				$respuesta = Datos::desactivarTiendasModel($datosController, "tienda");
 
 				if($respuesta == "success"){
 					echo "<script>location.href='index.php?action=mostrarTiendas';</script>";
@@ -705,10 +750,11 @@
 
 			$datosController = array( "fecha"=>$fecha,
 									  "total"=>$total,
-									  "tienda"=>$_SESSION["tienda"]);
+									  "tienda"=>$_SESSION["tienda"],
+									  "usuario"=>$_SESSION["id"]);
 			$id = Datos::agregarVentaModel($datosController, "ventas");
 
-			$resultado = Datos::agregarDetallesModel($id[0], "detalles_venta");
+			$resultado = Datos::agregarDetallesModel($id[0], "detalles_venta", $datosController);
 
 			if($resultado == "success"){
 				unset($_SESSION["carrito"]);

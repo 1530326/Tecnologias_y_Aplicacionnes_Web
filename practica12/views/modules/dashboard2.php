@@ -12,6 +12,7 @@
 <section class="content">
       <!-- Info boxes -->
       <div class="row">
+        <h2 align="center">Tienda: <?php echo $_SESSION["nomTienda"]; ?></h2>
         <!-- /.col -->
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box">

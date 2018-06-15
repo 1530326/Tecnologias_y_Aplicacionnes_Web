@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 10-06-2018 a las 22:52:25
+-- Tiempo de generación: 13-06-2018 a las 23:56:35
 -- Versión del servidor: 5.7.21
 -- Versión de PHP: 5.6.35
 
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `detalles_venta` (
   PRIMARY KEY (`id`),
   KEY `id_producto` (`id_producto`),
   KEY `id_venta` (`id_venta`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `detalles_venta`
@@ -76,7 +76,12 @@ INSERT INTO `detalles_venta` (`id`, `id_producto`, `id_venta`, `nombre`, `cantid
 (3, 21, 2, 'Moto G6+', 1, 0),
 (5, 21, 3, 'Moto G6+', 1, 0),
 (9, 19, 6, 'Refrigerador MABE', 1, 7800),
-(10, 20, 7, 'Librero', 1, 4064);
+(10, 20, 7, 'Librero', 1, 4064),
+(11, 16, 8, 'Moto G4+', 7, 4500),
+(12, 21, 9, 'Moto G6+', 1, 6000),
+(13, 16, 10, 'Moto G4+', 4, 4500),
+(14, 16, 11, 'Moto G4+', 4, 4500),
+(15, 21, 11, 'Moto G6+', 1, 6000);
 
 -- --------------------------------------------------------
 
@@ -98,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `historial` (
   KEY `id_producto` (`id_producto`),
   KEY `id_usuario` (`id_usuario`),
   KEY `id_tienda` (`id_tienda`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `historial`
@@ -107,7 +112,10 @@ CREATE TABLE IF NOT EXISTS `historial` (
 INSERT INTO `historial` (`id_historial`, `id_producto`, `id_usuario`, `id_tienda`, `fecha`, `nota`, `referencia`, `cantidad`) VALUES
 (14, 16, 19, 1, '2018-06-10', 'Agregar salida', 'kdhw290', 3),
 (15, 21, 15, 1, '2018-06-10', 'Agregar entrada', 'fwgeg443', 5),
-(16, 16, 15, 1, '2018-06-10', 'Agregar entrada', 'p200002', 7);
+(16, 16, 15, 1, '2018-06-10', 'Agregar entrada', 'p200002', 7),
+(17, 16, 15, 1, '2018-06-14', 'Agregar entrada', '322435', 20),
+(18, 16, 15, 1, '2018-06-14', 'Venta del producto', '00015416', 4),
+(19, 21, 15, 1, '2018-06-14', 'Venta del producto', '00015121', 1);
 
 -- --------------------------------------------------------
 
@@ -136,10 +144,10 @@ CREATE TABLE IF NOT EXISTS `productos` (
 --
 
 INSERT INTO `productos` (`id_producto`, `codigo_producto`, `nombre`, `fecha_agregado`, `precio`, `stock`, `id_categoria`, `foto`, `id_tienda`) VALUES
-(16, '000001', 'Moto G4+', '2018-06-10', 4500, 7, 27, 'views/tools/img/angie.png', 1),
+(16, '000001', 'Moto G4+', '2018-06-10', 4500, 12, 27, 'views/tools/img/angie.png', 1),
 (20, '000005', 'Librero', '2018-06-10', 4064, 1, 29, 'views/tools/img/angie.png', 2),
 (19, '000004', 'Refrigerador MABE', '2018-06-10', 7800, 5, 28, 'views/tools/img/start.png', 2),
-(21, '000002', 'Moto G6+', '2018-06-10', 6000, 10, 27, 'views/tools/img/motorola-moto-g4-.jpg', 1);
+(21, '000002', 'Moto G6+', '2018-06-10', 6000, 8, 27, 'views/tools/img/motorola-moto-g4-.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -153,6 +161,7 @@ CREATE TABLE IF NOT EXISTS `tienda` (
   `nombre` varchar(100) NOT NULL,
   `direccion` varchar(200) NOT NULL,
   `fecha` date NOT NULL,
+  `estado` int(11) NOT NULL,
   PRIMARY KEY (`id_tienda`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
@@ -160,9 +169,9 @@ CREATE TABLE IF NOT EXISTS `tienda` (
 -- Volcado de datos para la tabla `tienda`
 --
 
-INSERT INTO `tienda` (`id_tienda`, `nombre`, `direccion`, `fecha`) VALUES
-(1, 'Sucursal Centro', 'Av. Centro 476', '2018-06-10'),
-(2, 'Sucursal Noreste', 'Av.  Noreste 123', '2018-06-10');
+INSERT INTO `tienda` (`id_tienda`, `nombre`, `direccion`, `fecha`, `estado`) VALUES
+(1, 'Sucursal Centro', 'Av. Centro 476', '2018-06-10', 1),
+(2, 'Sucursal Noreste', 'Av.  Noreste 123', '2018-06-10', 1);
 
 -- --------------------------------------------------------
 
@@ -210,7 +219,7 @@ CREATE TABLE IF NOT EXISTS `ventas` (
   `id_tienda` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_tienda` (`id_tienda`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `ventas`
@@ -218,7 +227,11 @@ CREATE TABLE IF NOT EXISTS `ventas` (
 
 INSERT INTO `ventas` (`id`, `fecha`, `total`, `id_tienda`) VALUES
 (6, '2018-06-10', 15928, 2),
-(7, '2018-06-10', 4064, 2);
+(7, '2018-06-10', 4064, 2),
+(8, '2018-06-12', 31500, 1),
+(9, '2018-06-12', 6000, 1),
+(10, '2018-06-14', 24000, 1),
+(11, '2018-06-14', 24000, 1);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

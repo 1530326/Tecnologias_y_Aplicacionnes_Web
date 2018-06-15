@@ -41,6 +41,38 @@
                       }
                     });
               }
+
+              function confirmarA(tienda){
+                    swal({
+                      title: "Contraseña",
+                      text:  "Ingrese contraseña",
+                      content: "input",
+                    }).then((value) => {
+                      var contra = "<?php echo $valorC; ?>";
+
+                      if(value!=contra){
+                        location.href='index.php?action=mostrarTiendas';
+                      }else{
+                        location.href='index.php?action=mostrarTiendas&idActivar='+tienda;
+                      }
+                    });
+              }
+
+              function confirmarD(tienda){
+                    swal({
+                      title: "Contraseña",
+                      text:  "Ingrese contraseña",
+                      content: "input",
+                    }).then((value) => {
+                      var contra = "<?php echo $valorC; ?>";
+
+                      if(value!=contra){
+                        location.href='index.php?action=mostrarTiendas';
+                      }else{
+                        location.href='index.php?action=mostrarTiendas&idDesactivar='+tienda;
+                      }
+                    });
+              }
             </script>
             <!-- /.box-header -->
         <div class="box-body table-responsive no-padding">
@@ -50,6 +82,7 @@
               <th>Nombre</th>
               <th>Dirección</th>
               <th>Fecha</th>
+              <th>Estado</th>
               <th>Acciones</th>
             </tr>
             <tbody>
@@ -57,6 +90,8 @@
                   $vistaTiendas = new MvcController();
                   $vistaTiendas -> vistaTiendasController();
                   $vistaTiendas -> borrarTiendasController();
+                  $vistaTiendas -> activarTiendasController();
+                  $vistaTiendas -> desactivarTiendasController();
                 ?>
             </tbody>
           </table>

@@ -1,6 +1,6 @@
 <ul class="sidebar-menu" data-widget="tree"> 
   <li class="header">MAIN NAVIGATION</li>
-    <?php if($_SESSION["tipo"]=="admin"){ ?>
+    <?php if($_SESSION["tipo"]=="admin" && ($_SESSION["tienda"]==NULL)){ ?>
         <li class="active"><a href="index.php?action=dashboardAdmin"><i class="fa fa-circle-o"></i> Dashboard</a></li>
         <li class="treeview">
           <a href="#">
@@ -14,8 +14,35 @@
             <li><a href="index.php?action=agregarTienda"><i class="fa fa-circle-o"></i> Agregar</a></li>
           </ul>
         </li>
-    <?php }else{ ?>
-    <li class="active"><a href="index.php?action=dashboard"><i class="fa fa-circle-o"></i> Dashboard</a></li>
+    <?php }else if($_SESSION["tipo"]=="admin"){ ?>
+      <li class="active"><a href="index.php?action=dashboard2"><i class="fa fa-circle-o"></i> Dashboard</a></li>
+        <li class="">
+        <a href="index.php?action=mostrarUsuarios">
+          <i class="ion-android-contact"></i> <span>Usuarios</span>
+        </a>
+        </li>
+      <li class="">
+      <a href="index.php?action=mostrarCategorias">
+        <i class="ion-android-folder-open"></i> <span>Categorías</span>
+      </a>
+    </li>
+    <li class="">
+      <a href="index.php?action=mostrarProductos">
+        <i class="ion-bag"></i> <span>Productos</span>
+      </a>
+    </li>
+    <li class="">
+      <a href="index.php?action=mostrarVentas">
+        <i class="ion ion-ios-cart-outline"></i> <span>Ventas</span>
+      </a>
+    </li>
+    <li class="">
+      <a href="index.php?action=salirTienda">
+        <i class="ion-android-contact"></i> <span>Salir</span>
+      </a>
+    </li>
+  <?php }else{ ?>
+        <li class="active"><a href="index.php?action=dashboard"><i class="fa fa-circle-o"></i> Dashboard</a></li>
     <li class="">
       <a href="index.php?action=mostrarUsuarios">
         <i class="ion-android-contact"></i> <span>Usuarios</span>
@@ -36,5 +63,5 @@
         <i class="ion ion-ios-cart-outline"></i> <span>Ventas</span>
       </a>
     </li>
-  <?php } ?>
+  <?php }?>
   </ul>

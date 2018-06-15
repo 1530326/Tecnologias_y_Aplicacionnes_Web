@@ -46,7 +46,7 @@
 			
 				$module = "views/modules/dashboardAdmin.php";
 
-			}else if($enlacesModel=="mostrarVentas" || $enlacesModel=="agregarVenta" || $enlacesModel=="agregarVentaProd" || $enlacesModel=="terminarVenta" || $enlacesModel=="quitarItem"){
+			}else if($enlacesModel=="mostrarVentas" || $enlacesModel=="agregarVenta" || $enlacesModel=="agregarVentaProd" || $enlacesModel=="terminarVenta" || $enlacesModel=="quitarItem" || $enlacesModel=="salirTienda"){
 
 				$module = "views/modules/$enlacesModel.php";
 

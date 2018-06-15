@@ -18,7 +18,7 @@
 		}
 
 		public static function ingresaTiendaModel($datosModel){
-			$sql = Conexion::conectar()->prepare("SELECT id_tienda, nombre, direccion, fecha FROM tienda WHERE id_tienda=:id");	
+			$sql = Conexion::conectar()->prepare("SELECT id_tienda, nombre, direccion, fecha, estado FROM tienda WHERE id_tienda=:id");	
 
 			$sql->bindParam(":id", $datosModel, PDO::PARAM_INT);
 
@@ -420,10 +420,18 @@
 			$sql->close();
 		}
 
+		public static function nombreTiendaModel($id){
+			$sql = Conexion::conectar()->prepare("SELECT nombre FROM tienda WHERE id_tienda=$id");
+			$sql->execute(); 
+			return $sql->fetch(PDO::FETCH_BOTH);
+
+			$sql->close();
+		}
+
 		//------------------------------SECCION TIENDAS-----------------------------------
 		//función para agregar una nueva tienda, recibe todos los parámetros necesarios para registrarlo en la base de datos
 		public static function addTiendaModel($datosModel, $tabla){
-			$sql = Conexion::conectar()->prepare("INSERT INTO $tabla(id_tienda, nombre, direccion, fecha) VALUES (NULL,:nombre, :direccion, :fecha)");	
+			$sql = Conexion::conectar()->prepare("INSERT INTO $tabla(id_tienda, nombre, direccion, fecha, estado) VALUES (NULL,:nombre, :direccion, :fecha, 1)");	
 
 			$sql->bindParam(":nombre", $datosModel["nombre"], PDO::PARAM_STR);
 			$sql->bindParam(":direccion", $datosModel["direccion"], PDO::PARAM_STR);
@@ -441,7 +449,7 @@
 		//este método retorna todos los registros que se encuentran en la tabla tienda
 		public static function vistaTiendasModel($tabla){
 
-			$stmt = Conexion::conectar()->prepare("SELECT id_tienda, nombre, direccion, fecha FROM $tabla");	
+			$stmt = Conexion::conectar()->prepare("SELECT id_tienda, nombre, direccion, fecha, estado FROM $tabla");	
 			$stmt->execute(); 
 			return $stmt->fetchAll();
 
@@ -473,6 +481,37 @@
 			}
 			$stmt->close();
 
+		}
+
+		//---------------------------ACTIVAR/DESACTIVAR TIENDAS----------------------------
+		public static function activarTiendasModel($datosModel, $tabla){
+
+			$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET estado = 1 WHERE id_tienda = :id");
+
+			$stmt->bindParam(":id", $datosModel, PDO::PARAM_INT);
+
+			if($stmt->execute()){
+				return "success";
+			}else{
+				return "error";
+			}
+
+			$stmt->close();
+		}
+
+		public static function desactivarTiendasModel($datosModel, $tabla){
+
+			$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET estado = 0 WHERE id_tienda = :id");
+
+			$stmt->bindParam(":id", $datosModel, PDO::PARAM_INT);
+
+			if($stmt->execute()){
+				return "success";
+			}else{
+				return "error";
+			}
+
+			$stmt->close();
 		}
 
 		//regresa los valores de los campos del registro que fue seleccionado
@@ -584,10 +623,13 @@
 		}
 
 		//agrega los productos a la tabla de detalles_venta
-		public static function agregarDetallesModel($id, $tabla){
+		public static function agregarDetallesModel($id, $tabla, $datos){
 			$sql = Conexion::conectar()->prepare("INSERT INTO $tabla(id, id_producto, id_venta, nombre, cantidad, precio) VALUES (NULL,:producto, :venta, :nombre, :cantidad, :precio)");
 
 			$sql2 = Conexion::conectar()->prepare("UPDATE productos SET stock = stock-:stock WHERE id_producto=:producto");
+
+
+			$sql3 = Conexion::conectar()->prepare("INSERT INTO historial(id_historial, id_producto, id_usuario, id_tienda, fecha, nota, referencia, cantidad) VALUES(NULL, :producto, :usuario, :tienda, :fecha, :nota, :referencia, :cantidad)");
 
 			foreach ($_SESSION["carrito"] as $producto) {
 				$sql->bindParam(":producto", $producto->id_producto, PDO::PARAM_INT);
@@ -601,6 +643,18 @@
 				$sql2->bindParam(":stock", $producto->cantidad, PDO::PARAM_INT);
 				$sql2->bindParam(":producto", $producto->id_producto, PDO::PARAM_INT);
 				$sql2->execute();
+
+				$nota = "Venta del producto";
+				$referencia = "000$datos[usuario]$producto->cantidad$producto->id_producto";
+				
+				$sql3->bindParam(":producto", $producto->id_producto, PDO::PARAM_INT);
+				$sql3->bindParam(":usuario", $datos["usuario"], PDO::PARAM_INT);
+				$sql3->bindParam(":tienda", $datos["tienda"], PDO::PARAM_INT);	
+				$sql3->bindParam(":fecha", $datos["fecha"], PDO::PARAM_INT);
+				$sql3->bindParam(":nota", $nota, PDO::PARAM_STR);	
+				$sql3->bindParam(":referencia", $referencia, PDO::PARAM_STR);
+				$sql3->bindParam(":cantidad", $producto->cantidad, PDO::PARAM_STR);
+				$sql3->execute();
 			}
 
 			return "success";
