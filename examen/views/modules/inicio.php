@@ -1,4 +1,5 @@
 <?php
+  //se obtiene una lista con los grupos registrados en la base de datos
   $mvc = new MvcController();
   $grupos = $mvc->listarGruposController();
 ?>
@@ -13,9 +14,10 @@
     <script src="../js/vendor/modernizr.js"></script>
     <script type="text/javascript" language="javascript">
       function obtiene_http_request(){
+        //esta función nos sirve para que en el momento que se seleccione un grupo se actualice el segundo select con los registros que están ligados a la opción del primer select
         var req = false;
         try{
-          req = new XMLHttpRequest(); /* p.e. Firefox */
+          req = new XMLHttpRequest(); /* para Firefox */
         }catch(err1){
           try{
             req = new ActiveXObject("Msxml2.XMLHTTP");
@@ -31,6 +33,7 @@
       }
       var miPeticion = obtiene_http_request();
 
+      //esta funcion redirecciona a un archivo que se encarga de imprimir el archivo
       function alumnas(id,ide,url){
         var mi_aleatorio=parseInt(Math.random()*99999999);
         var vinculo=url+"&id="+id+"&rand="+mi_aleatorio;
@@ -94,6 +97,7 @@
 </html>
 
 <?php
+  //se crea un objeto de la clase MvcController y se manda llamar el método de addPagoController cuando se presiona el botón de guardar
 	$registro = new MvcController();
 	$registro->addPagoController();
 ?>

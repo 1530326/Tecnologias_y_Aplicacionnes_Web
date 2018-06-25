@@ -6553,12 +6553,15 @@ tr:hover {background-color:#f5f5f5;}
 
 <body>
 
-<?php include "modules/navegacion.php"; ?>
+<?php 
+//se incluye el archivo donde se encuentran las opciones de navegación
+ include "modules/navegacion.php"; ?>
 
 
 <section>
 
 <?php 
+//al momento que se seleccione una opción se ejecuta el método de enlacesPaginasController
 $mvc = new MvcController();
 $mvc -> enlacesPaginasController();
 ?>

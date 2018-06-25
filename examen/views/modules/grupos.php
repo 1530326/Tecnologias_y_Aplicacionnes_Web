@@ -1,8 +1,7 @@
 <?php
+  //si no hay sesión iniciada, se redirecciona a la página de inicio
   if(!isset($_SESSION["nombre"])){
-
     echo "<script>location.href='index.php?action=inicio';</script>";
-
     exit();
 
   }
@@ -32,6 +31,7 @@
 </html>
 
 <?php
+  //formulario para agregar un nuevo grupo, cuando se presione el botón de guardar se ejecutará el método de addGrupoController
 	$registro = new MvcController();
 	$registro->addGrupoController();
 ?>

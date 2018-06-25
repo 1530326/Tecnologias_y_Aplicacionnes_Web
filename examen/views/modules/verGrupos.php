@@ -1,4 +1,5 @@
 <?php
+  //si no hay sesión iniciada, se redirecciona a la página de inicio
   if(!isset($_SESSION["nombre"])){
     echo "<script>location.href='index.php?action=inicio';</script>";
     exit();
@@ -20,6 +21,7 @@
           </thead>
           <tbody>
             <?php
+              //se imprime las filas de la tabla de acuerdo a lo que tenga el método de vistaGruposController y cuando se de al botón de borrar se ejecuta el método de borrarGruposController
               $vistaGrupos = new MvcController();
               $vistaGrupos -> vistaGruposController();
               $vistaGrupos -> borrarGruposController();

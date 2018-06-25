@@ -1,6 +1,3 @@
-<?php
-
-?>
 <!doctype html>
 <html class="no-js" lang="en">
   <head>
@@ -15,8 +12,8 @@
     <div class="row">
       <h3>Iniciar sesión</h3>
       <form method="POST">
-        <p><label>Usuario: </label><input type="text" name="usuario" placeholder="Email"></p>
-        <p><label>Password: </label><input type="password" name="contra" placeholder="Password"></p>
+        <p><label>Usuario: </label><input type="text" name="usuario" placeholder="Usuario"></p>
+        <p><label>Password: </label><input type="password" name="contra" placeholder="Contraseña"></p>
         <input type="submit" name="submit" class="button" value="Iniciar sesión">
       </form>
     </div>
@@ -24,6 +21,7 @@
 </html>
 
 <?php
+  //se manda llamar el método de ingresarController cuando se presiona el botón de Inciar Sesión
   $iniciar = new MvcController();
   $iniciar->ingresarController();
 ?>

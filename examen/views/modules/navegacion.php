@@ -1,4 +1,5 @@
 <?php
+  //de acuerdo con lo que contenga el action es el menú de navegación que se va a mostrar
 	if(empty($_GET["action"])){
 		$_GET["action"] = "inicio";
 	}

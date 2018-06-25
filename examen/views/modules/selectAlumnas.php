@@ -1,6 +1,9 @@
 <?php
+	//obtiene las alumnas de acuerdo al id del grupo
 	$mvc = new MvcController();
 	$alumnas = $mvc->listarAlumnasController($_GET["id"]);
+
+	//se imprime el select con los options traídos por el método
 ?>
 <div class="row">
 <label>Alumna: </label>

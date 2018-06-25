@@ -16,6 +16,7 @@
           </thead>
           <tbody>
             <?php
+              //se imprime las filas con los registros de la tabla lugares
               $vistaLugares = new MvcController();
               $vistaLugares -> vistaLugaresController();
             ?>
